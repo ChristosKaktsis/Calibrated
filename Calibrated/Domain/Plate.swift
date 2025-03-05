@@ -72,6 +72,7 @@ extension Plate {
         Plate(weight: 10),
         Plate(weight: 5),
         Plate(weight: 2.5),
+        Plate(weight: 1.5),
         Plate(weight: 1.25),
         Plate(weight: 0.5),
         

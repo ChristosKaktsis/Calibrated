@@ -9,14 +9,6 @@ import SwiftUI
 
 struct PlateCalculatorView: View {
     @ObservedObject var viewModel = ViewModel()
-    let columns = [
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-        GridItem(.flexible())
-    ]
     var body: some View {
         VStack {
             ZStack {
@@ -27,13 +19,35 @@ struct PlateCalculatorView: View {
                 }
                 .padding(.horizontal, 27)
             }
-            .padding(.top, 50)
-            
-            Spacer()
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
             Divider()
-                .padding()
-            VStack(alignment: .leading) {
                 
+            HStack {
+                Text("Set weight")
+                TextField("Enter weight", value: $viewModel.workingWeight, format: .number)
+                    .textFieldStyle(.roundedBorder)
+                    .padding(.leading, 55.0)
+                
+            }
+            .padding()
+            
+            Divider()
+            
+            VStack(alignment: .leading) {
+                Text("Select bar weight")
+                Picker("Hello", selection: $viewModel.barWeight) {
+                    ForEach(viewModel.bars, id: \.self) { bar in
+                        Text(Int(bar).description)
+                    }
+                }
+                .pickerStyle(.segmented)
+            }
+            .padding()
+            
+            Divider()
+              
+            
+            VStack(alignment: .leading) {
                 Text("Select available plates")
                     .padding(.horizontal)
                 ScrollView(.horizontal) {
@@ -51,10 +65,12 @@ struct PlateCalculatorView: View {
                     .padding()
                 }
                 .scrollIndicators(.hidden)
-                
             }
+            
             Button("Calculate") {
-                viewModel.setPlatesOnTheBar(workingWeight: 145)
+                if let weight = viewModel.workingWeight {
+                    viewModel.setPlatesOnTheBar(workingWeight: weight)
+                }
             }
             .padding()
         }
@@ -76,9 +92,11 @@ struct PlatesStackView: View {
 extension PlateCalculatorView {
     class ViewModel: ObservableObject {
         var plates: [Plate] = Plate.allPlates
-        let barWeight = 20.0
+        @Published var barWeight = 20.0
+        let bars: [Double] = [32.0, 25.0, 20.0, 15.0, 10.0, 5.0]
         @Published var platesOnBar: [Plate:Int] = [:]
         @Published var disabledPlates: [Plate: Bool] = [:]
+        @Published var workingWeight: Double?
         
         init() {
             // Ensure all plates are enabled by default
