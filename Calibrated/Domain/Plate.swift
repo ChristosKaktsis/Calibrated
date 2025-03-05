@@ -34,9 +34,9 @@ struct Plate: Identifiable, Hashable {
         switch weight {
         case 50, 25, 20: return 250
         case 15: return 210
-        case 10: return 200
-        case 5: return 150
-        case 2.5: return 130
+        case 10: return 170
+        case 5: return 130
+        case 2.5: return 100
         default: return 100
         }
     }

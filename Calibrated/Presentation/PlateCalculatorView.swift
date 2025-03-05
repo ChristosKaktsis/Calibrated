@@ -21,13 +21,17 @@ struct PlateCalculatorView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
             Divider()
-                
+            
             HStack {
                 Text("Set weight")
                 TextField("Enter weight", value: $viewModel.workingWeight, format: .number)
                     .textFieldStyle(.roundedBorder)
                     .padding(.leading, 55.0)
-                
+                    .onChange(of: viewModel.workingWeight) { oldValue, newValue in
+                        if let doubleValue = newValue, doubleValue > 500 {
+                            viewModel.workingWeight = 500.0// Limit to 500
+                        }
+                    }
             }
             .padding()
             
@@ -45,7 +49,7 @@ struct PlateCalculatorView: View {
             .padding()
             
             Divider()
-              
+            
             
             VStack(alignment: .leading) {
                 Text("Select available plates")
